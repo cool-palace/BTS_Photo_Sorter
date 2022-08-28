@@ -5,6 +5,8 @@ from config import *
 class Manager:
     def __init__(self):
         self.vk = Manager.__vk_connect()
+        self.user_id = self.__user_id()
+        self.source_album_id = self.__valid_source_album_id()
         self.album_map = self.__target_albums()
         self.photos = self.__photos()
         self.keys_map = {
@@ -38,11 +40,11 @@ class Manager:
 
     def reset(self):
         for name in self.album_map:
-            response = self.vk.photos.get(owner_id=self.__user_id(),
+            response = self.vk.photos.get(owner_id=self.user_id,
                                           album_id=self.album_map[name])
             for item in response['items']:
-                self.vk.photos.move(owner_id=self.__user_id(),
-                                    target_album_id=self.__valid_source_album_id(),
+                self.vk.photos.move(owner_id=self.user_id,
+                                    target_album_id=self.source_album_id,
                                     photo_id=item['id'])
         self.photos = self.__photos()
 
@@ -50,7 +52,7 @@ class Manager:
         return str(self.vk.users.get()[0]['id'])
 
     def __target_albums(self) -> dict():
-        response = self.vk.photos.getAlbums(owner_id=self.__user_id())
+        response = self.vk.photos.getAlbums(owner_id=self.user_id)
         names = {'RM', 'Suga', 'J-Hope', 'Jin', 'V (Kim Taehyung)', 'Jimin', 'Jungkook'}
         album_map = dict()
         for item in response['items']:
@@ -65,7 +67,7 @@ class Manager:
         return album_map
 
     def __valid_source_album_id(self) -> str:
-        response = self.vk.photos.getAlbums(owner_id=self.__user_id())
+        response = self.vk.photos.getAlbums(owner_id=self.user_id)
         for item in response['items']:
             if item['id'] == int(ALBUM_ID):
                 return ALBUM_ID
@@ -74,29 +76,23 @@ class Manager:
         return ''
 
     @staticmethod
-    def link(item) -> str:
-        for size in item['sizes']:
-            if size['type'] == 'z':
-                return size['url']
-        for size in item['sizes']:
-            if size['type'] == 'y':
-                return size['url']
+    def __link(item) -> str:
         return item['sizes'][-1]['url']
 
     def __photos(self) -> []:
-        valid_id = self.__valid_source_album_id()
+        valid_id = self.source_album_id
         result = []
         if len(valid_id) == 0:
             return result
-        response = self.vk.photos.get(owner_id=self.__user_id(),
+        response = self.vk.photos.get(owner_id=self.user_id,
                                       album_id=valid_id)
         for item in response['items']:
             photo_id = item['id']
-            url = Manager.link(item)
+            url = Manager.__link(item)
             result.append((photo_id, url))
         return result
 
     def move(self, index: int, key: str):
-        return self.vk.photos.move(owner_id=self.__user_id(),
+        return self.vk.photos.move(owner_id=self.user_id,
                                    target_album_id=self.album_map[self.keys_map[key]],
                                    photo_id=self.photos[index][0])
