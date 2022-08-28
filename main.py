@@ -9,7 +9,6 @@ class MainApp(MDApp):
     theme_cls = ThemeManager()
     sorter = Manager()
     current_index = 0
-    photo_list = []
     actions = dict()
 
     def __init__(self):
@@ -39,29 +38,41 @@ class MainApp(MDApp):
         self.action(keycode[1])
 
     def action(self, key):
-        if key in self.sorter.keys_map:
+        if len(self.sorter.photos) == 0:
+            if key == 'r':
+                toast(text='Сброс сортировки...')
+                self.sorter.reset()
+                self.__load_photos()
+            return
+        current_id = self.sorter.photos[self.current_index][0]
+        need_action = current_id not in self.actions or self.actions[current_id] is not key
+        if key in self.sorter.keys_map and need_action:
             response = self.sorter.move(self.current_index, key)
             if response == 1:
-                toast('Фотография перемещена.')
+                self.actions[current_id] = key
+                toast('Фотография перемещена в альбом "' +\
+                      self.sorter.keys_map[key] + '"')
                 self.advance()
             else:
                 toast('Ошибка при перемещении.' + str(response))
-        elif len(self.sorter.photos) == 0 and key == 'r':
-            self.sorter.reset()
-            self.__load_photos()
-
-    def move(self, keycode):
-        self.keys_map[keycode[1]]
 
     def advance(self):
         if self.current_index < len(self.sorter.photos) - 1:
             self.current_index += 1
-            self.root.ids.image.source = self.sorter.photos[self.current_index][1]
+            self.display()
+        else:
+            toast(text='Достигнут конец альбома.')
 
     def back(self):
         if self.current_index > 0:
             self.current_index -= 1
-            self.root.ids.image.source = self.sorter.photos[self.current_index][1]
+            self.display()
+        else:
+            toast(text='Данная фотография является первой в альбоме.')
+
+    def display(self):
+        print(self.actions)
+        self.root.ids.image.source = self.sorter.photos[self.current_index][1]
 
 
 if __name__ == '__main__':
