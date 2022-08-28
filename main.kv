@@ -13,12 +13,17 @@ BoxLayout:
             size_hint: [0.2, 1]
             icon: 'arrow-left'
             text: 'Назад'
+            on_release:
+                app.back()
         AsyncImage:
+            id: image
             size_hint: [1, 1]
         MDFillRoundFlatIconButton:
             size_hint: [0.2, 1]
             icon: 'arrow-right'
             text: 'Пропуск'
+            on_release:
+                app.advance()
     BoxLayout:
         spacing: dp(20)
         pos_hint: {"center_x": .5, "center_y": .5}
