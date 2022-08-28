@@ -9,6 +9,7 @@ class MainApp(MDApp):
     theme_cls = ThemeManager()
     sorter = Manager()
     current_index = 0
+    photo_list = []
 
     def __init__(self):
         super().__init__()
@@ -27,7 +28,12 @@ class MainApp(MDApp):
     def on_start(self):
         self.theme_cls.primary_palette = 'Green'
         self.theme_cls.theme_style = 'Dark'
-        self.root.ids.image.source = self.sorter.photos[self.current_index][1]
+        photo_list = self.sorter.photos
+        if len(photo_list) > 0:
+            self.root.ids.image.source = self.sorter.photos[self.current_index][1]
+        else:
+            toast(text='Не удалось найти целевой альбом. Проверьте конфигурационный файл.',
+                  duration=10)
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
