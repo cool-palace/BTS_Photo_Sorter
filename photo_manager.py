@@ -7,6 +7,15 @@ class Manager:
         self.vk = Manager.__vk_connect()
         self.album_map = self.__target_albums()
         self.photos = self.__photos()
+        self.keys_map = {
+            '1': 'RM',
+            '2': 'Suga',
+            '3': 'J-Hope',
+            '4': 'Jin',
+            '5': 'V (Kim Taehyung)',
+            '6': 'Jimin',
+            '7': 'Jungkook'
+        }
 
     @staticmethod
     def __captcha_handler(captcha):
@@ -27,14 +36,15 @@ class Manager:
         vk = vk_session.get_api()
         return vk
 
-    def __reset(self):
+    def reset(self):
         for name in self.album_map:
             response = self.vk.photos.get(owner_id=self.__user_id(),
                                           album_id=self.album_map[name])
             for item in response['items']:
                 self.vk.photos.move(owner_id=self.__user_id(),
-                                    target_album_id=self.__valid_target_album_id(),
+                                    target_album_id=self.__valid_source_album_id(),
                                     photo_id=item['id'])
+        self.photos = self.__photos()
 
     def __user_id(self) -> str:
         return str(self.vk.users.get()[0]['id'])
@@ -85,3 +95,8 @@ class Manager:
             url = Manager.link(item)
             result.append((photo_id, url))
         return result
+
+    def move(self, index: int, key: str):
+        return self.vk.photos.move(owner_id=self.__user_id(),
+                                   target_album_id=self.album_map[self.keys_map[key]],
+                                   photo_id=self.photos[index][0])
