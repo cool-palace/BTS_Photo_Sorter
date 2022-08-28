@@ -1,0 +1,60 @@
+BoxLayout:
+    spacing: dp(20)
+    pos_hint: {"center_x": .5, "center_y": .5}
+    orientation: 'vertical'
+    MDToolbar:
+        title: "Сортировщик фото BTS"
+    BoxLayout:
+        spacing: dp(20)
+        pos_hint: {"center_x": .5, "center_y": .5}
+        orientation: 'horizontal'
+        size_hint_y: 1
+        MDFillRoundFlatIconButton:
+            size_hint: [0.2, 1]
+            icon: 'arrow-left'
+            text: 'Назад'
+        AsyncImage:
+            size_hint: [1, 1]
+        MDFillRoundFlatIconButton:
+            size_hint: [0.2, 1]
+            icon: 'arrow-right'
+            text: 'Пропуск'
+    BoxLayout:
+        spacing: dp(20)
+        pos_hint: {"center_x": .5, "center_y": .5}
+        orientation: 'horizontal'
+        size_hint_y: 0.2
+        size_hint_x: 0.75
+        MDFillRoundFlatIconButton:
+            size_hint: [1, 1]
+            icon: 'numeric-1-box-outline'
+            text: 'RM'
+        MDFillRoundFlatIconButton:
+            size_hint: [1, 1]
+            icon: 'numeric-2-box-outline'
+            text: 'Suga'
+        MDFillRoundFlatIconButton:
+            size_hint: [1, 1]
+            icon: 'numeric-3-box-outline'
+            text: 'J-Hope'
+    BoxLayout:
+        spacing: dp(20)
+        pos_hint: {"center_x": .5, "center_y": .5}
+        orientation: 'horizontal'
+        size_hint_y: 0.2
+        MDFillRoundFlatIconButton:
+            size_hint: [1, 1]
+            icon: 'numeric-4-box-outline'
+            text: 'Jin'
+        MDFillRoundFlatIconButton:
+            size_hint: [1, 1]
+            icon: 'numeric-5-box-outline'
+            text: 'V'
+        MDFillRoundFlatIconButton:
+            size_hint: [1, 1]
+            icon: 'numeric-6-box-outline'
+            text: 'Jimin'
+        MDFillRoundFlatIconButton:
+            size_hint: [1, 1]
+            icon: 'numeric-7-box-outline'
+            text: 'Jungkook'
