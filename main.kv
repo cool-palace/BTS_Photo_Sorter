@@ -23,6 +23,19 @@ BoxLayout:
             text: 'Пропуск'
             on_release:
                 app.advance()
+    MDSlider:
+        id: slider
+        min: 0
+        max: 0
+        step: 1
+        orientation: 'horizontal'
+        size_hint_y: 0.01
+        color: 'green'
+        value_track: True
+        value_track_color: [0, 1, 0, 1]
+        hint_bg_color: 'black'
+        hint_text_color: 'white'
+        on_value: app.set_index(*args)
     BoxLayout:
         spacing: dp(20)
         pos_hint: {"center_x": .5, "center_y": .5}

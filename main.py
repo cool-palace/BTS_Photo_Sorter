@@ -26,6 +26,8 @@ class MainApp(MDApp):
         if len(photo_list) > 0:
             self.root.ids.image.source = photo_list[self.current_index][1]
             self.current_index = 0
+            self.root.ids.slider.min = 1
+            self.root.ids.slider.max = len(photo_list)
         else:
             toast(text='Не удалось открыть целевой альбом. Проверьте конфигурационный файл.',
                   duration=10)
@@ -71,8 +73,12 @@ class MainApp(MDApp):
             toast(text='Данная фотография является первой в альбоме.')
 
     def display(self):
-        print(self.actions)
+        self.root.ids.slider.value = self.current_index + 1
         self.root.ids.image.source = self.sorter.photos[self.current_index][1]
+
+    def set_index(self, instance, value):
+        self.current_index = value - 1
+        self.display()
 
 
 if __name__ == '__main__':
