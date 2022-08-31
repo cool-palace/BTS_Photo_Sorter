@@ -77,7 +77,7 @@ class Manager:
 
     @staticmethod
     def __link(item) -> str:
-        return item['sizes'][-1]['url']
+        return item['sizes'][3]['url']
 
     def __photos(self) -> []:
         valid_id = self.source_album_id

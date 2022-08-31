@@ -4,21 +4,26 @@ from kivy.core.window import Window
 from photo_manager import Manager
 from kivymd.toast import toast
 
+Window.minimum_height = 500
+Window.minimum_width = 800
+
 
 class MainApp(MDApp):
     theme_cls = ThemeManager()
-    sorter = Manager()
     current_index = 0
     actions = dict()
+    sorter: Manager
 
     def __init__(self):
         super().__init__()
+        self.title = 'BTS Photo Sorter'
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self.root)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
     def on_start(self):
         self.theme_cls.primary_palette = 'Green'
         self.theme_cls.theme_style = 'Dark'
+        self.sorter = Manager()
         self.__load_photos()
 
     def __load_photos(self):
@@ -46,6 +51,14 @@ class MainApp(MDApp):
                 self.sorter.reset()
                 self.__load_photos()
             return
+
+        if key == 'right':
+            self.advance()
+            return
+        if key == 'left':
+            self.back()
+            return
+
         current_id = self.sorter.photos[self.current_index][0]
         need_action = current_id not in self.actions or self.actions[current_id] is not key
         if key in self.sorter.keys_map and need_action:
