@@ -1,13 +1,15 @@
 import vk_api
-from config import *
 from captcha_handler import Handler
+from kivy.uix.popup import Popup
+import json
 
 
 class Manager:
     def __init__(self):
-        self.vk = Manager.__vk_connect()
+        config = Manager.__config()
+        self.vk = Manager.__vk_connect(config)
         self.user_id = self.__user_id()
-        self.source_album_id = self.__valid_source_album_id()
+        self.source_album_id = self.__valid_source_album_id(config['album_id'])
         self.album_map = self.__target_albums()
         self.photos = self.__photos()
         self.keys_map = {
@@ -21,16 +23,25 @@ class Manager:
         }
 
     @staticmethod
-    def __vk_connect():
-        vk_session = vk_api.VkApi(LOGIN, PASSWORD,
-                                  app_id=APP_ID,
-                                  scope=PERMISSIONS,
+    def __config():
+        file = open('config.json', 'r', encoding='utf-8')
+        config = json.loads(file.read())
+        file.close()
+        return config
+
+    @staticmethod
+    def __vk_connect(config):
+        vk_session = vk_api.VkApi(config['login'], config['password'],
+                                  app_id=config['app_id'],
+                                  scope=config['permissions'],
                                   config_filename='vk_config.v2.json',
                                   captcha_handler=Handler.captcha_handler)
         try:
             vk_session.auth()
         except vk_api.exceptions.AuthError as error:
-            print(error)
+            Popup(title=str(error),
+                  size_hint=[.5, .5],
+                  auto_dismiss=True).show()
         vk = vk_session.get_api()
         return vk
 
@@ -62,12 +73,12 @@ class Manager:
                     album_map[name] = self.vk.photos.createAlbum(title=name)['id']
         return album_map
 
-    def __valid_source_album_id(self) -> str:
+    def __valid_source_album_id(self, album_id: str) -> str:
         response = self.vk.photos.getAlbums(owner_id=self.user_id)
         for item in response['items']:
-            if item['id'] == int(ALBUM_ID):
-                return ALBUM_ID
-            if item['title'] == ALBUM_ID:
+            if item['id'] == int(album_id):
+                return album_id
+            if item['title'] == album_id:
                 return str(item['id'])
         return ''
 
