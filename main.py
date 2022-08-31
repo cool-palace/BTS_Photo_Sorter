@@ -13,6 +13,7 @@ class MainApp(MDApp):
     current_index = 0
     actions = dict()
     sorter: Manager
+    buttons = dict
 
     def __init__(self):
         super().__init__()
@@ -22,9 +23,18 @@ class MainApp(MDApp):
 
     def on_start(self):
         self.theme_cls.primary_palette = 'Green'
+        self.theme_cls.primary_dark_hue = '800'
+        self.theme_cls.primary_light_hue = '400'
         self.theme_cls.theme_style = 'Dark'
         self.sorter = Manager()
         self.__load_photos()
+        self.buttons = {'1': self.root.ids.rm,
+                        '2': self.root.ids.suga,
+                        '3': self.root.ids.jhope,
+                        '4': self.root.ids.jin,
+                        '5': self.root.ids.v,
+                        '6': self.root.ids.jimin,
+                        '7': self.root.ids.jk}
 
     def __load_photos(self):
         photo_list = self.sorter.photos
@@ -64,6 +74,7 @@ class MainApp(MDApp):
         if key in self.sorter.keys_map and need_action:
             response = self.sorter.move(self.current_index, key)
             if response == 1:
+                self.highlight_button(False)
                 self.actions[current_id] = key
                 toast('Фотография перемещена в альбом "' +\
                       self.sorter.keys_map[key] + '"')
@@ -73,6 +84,7 @@ class MainApp(MDApp):
 
     def advance(self):
         if self.current_index < len(self.sorter.photos) - 1:
+            self.highlight_button(False)
             self.current_index += 1
             self.display()
         else:
@@ -80,6 +92,7 @@ class MainApp(MDApp):
 
     def back(self):
         if self.current_index > 0:
+            self.highlight_button(False)
             self.current_index -= 1
             self.display()
         else:
@@ -88,8 +101,17 @@ class MainApp(MDApp):
     def display(self):
         self.root.ids.slider.value = self.current_index + 1
         self.root.ids.image.source = self.sorter.photos[self.current_index][1]
+        self.highlight_button(True)
+
+    def highlight_button(self, enable: bool):
+        current_id = self.sorter.photos[self.current_index][0]
+        color = self.theme_cls.primary_light if enable else self.theme_cls.primary_dark
+        if current_id in self.actions:
+            button = self.buttons[self.actions[current_id]]
+            button.md_bg_color = color
 
     def set_index(self, instance, value):
+        self.highlight_button(False)
         self.current_index = value - 1
         self.display()
 

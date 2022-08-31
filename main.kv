@@ -12,6 +12,7 @@ BoxLayout:
             size_hint: [0.2, 1]
             icon: 'arrow-left'
             text: 'Назад'
+            md_bg_color: app.theme_cls.primary_dark
             on_release:
                 app.back()
         AsyncImage:
@@ -21,6 +22,7 @@ BoxLayout:
             size_hint: [0.2, 1]
             icon: 'arrow-right'
             text: 'Пропуск'
+            md_bg_color: app.theme_cls.primary_dark
             on_release:
                 app.advance()
     MDSlider:
@@ -43,21 +45,27 @@ BoxLayout:
         size_hint_y: 0.1
         size_hint_x: 0.75
         MDFillRoundFlatIconButton:
+            id: rm
             size_hint: [1, 1]
             icon: 'numeric-1-box-outline'
             text: 'RM'
+            md_bg_color: app.theme_cls.primary_dark
             on_release:
                 app.action('1')
         MDFillRoundFlatIconButton:
+            id: suga
             size_hint: [1, 1]
             icon: 'numeric-2-box-outline'
             text: 'Suga'
+            md_bg_color: app.theme_cls.primary_dark
             on_release:
                 app.action('2')
         MDFillRoundFlatIconButton:
+            id: jhope
             size_hint: [1, 1]
             icon: 'numeric-3-box-outline'
             text: 'J-Hope'
+            md_bg_color: app.theme_cls.primary_dark
             on_release:
                 app.action('3')
     BoxLayout:
@@ -66,26 +74,34 @@ BoxLayout:
         orientation: 'horizontal'
         size_hint_y: 0.1
         MDFillRoundFlatIconButton:
+            id: jin
             size_hint: [1, 1]
             icon: 'numeric-4-box-outline'
             text: 'Jin'
+            md_bg_color: app.theme_cls.primary_dark
             on_release:
                 app.action('4')
         MDFillRoundFlatIconButton:
+            id: v
             size_hint: [1, 1]
             icon: 'numeric-5-box-outline'
             text: 'V'
+            md_bg_color: app.theme_cls.primary_dark
             on_release:
                 app.action('5')
         MDFillRoundFlatIconButton:
+            id: jimin
             size_hint: [1, 1]
             icon: 'numeric-6-box-outline'
             text: 'Jimin'
+            md_bg_color: app.theme_cls.primary_dark
             on_release:
                 app.action('6')
         MDFillRoundFlatIconButton:
+            id: jk
             size_hint: [1, 1]
             icon: 'numeric-7-box-outline'
             text: 'Jungkook'
+            md_bg_color: app.theme_cls.primary_dark
             on_release:
                 app.action('7')
