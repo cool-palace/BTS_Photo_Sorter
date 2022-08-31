@@ -56,10 +56,10 @@ class MainApp(MDApp):
 
     def action(self, key):
         if len(self.sorter.photos) == 0:
-            if key == 'r':
-                toast(text='Сброс сортировки...')
-                self.sorter.reset()
-                self.__load_photos()
+            # if key == 'r':
+            #     toast(text='Сброс сортировки...')
+            #     self.sorter.reset()
+            #     self.__load_photos()
             return
 
         if key == 'right':

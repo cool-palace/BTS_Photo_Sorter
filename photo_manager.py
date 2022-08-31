@@ -84,7 +84,15 @@ class Manager:
 
     @staticmethod
     def __link(item) -> str:
-        return item['sizes'][3]['url']
+        link_y = ''
+        for size in item['sizes']:
+            if size['type'] == 'z':
+                return size['url']
+            elif size['type'] == 'y':
+                link_y += size['url']
+        if len(link_y) > 0:
+            return link_y
+        return item['sizes'][-1]['url']
 
     def __photos(self) -> []:
         valid_id = self.source_album_id
@@ -92,7 +100,8 @@ class Manager:
         if len(valid_id) == 0:
             return result
         response = self.vk.photos.get(owner_id=self.user_id,
-                                      album_id=valid_id)
+                                      album_id=valid_id,
+                                      count=500)
         for item in response['items']:
             photo_id = item['id']
             url = Manager.__link(item)
