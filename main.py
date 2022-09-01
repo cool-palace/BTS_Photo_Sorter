@@ -1,9 +1,14 @@
+import traceback
+import os, sys
+from kivy import Config
+from kivy.resources import resource_add_path
 from kivymd.app import MDApp
 from kivymd.theming import ThemeManager
 from kivy.core.window import Window
 from photo_manager import Manager
 from kivymd.toast import toast
-
+os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
+Config.set('graphics', 'multisamples', '0')
 Window.minimum_height = 500
 Window.minimum_width = 800
 
@@ -117,5 +122,11 @@ class MainApp(MDApp):
 
 
 if __name__ == '__main__':
-    MainApp().run()
+    try:
+        if hasattr(sys, '_MEIPASS'):
+            resource_add_path(os.path.join(sys._MEIPASS))
+        MainApp().run()
+    except Exception:
+        traceback.print_exc()
+        input()
 
